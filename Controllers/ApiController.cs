@@ -25,7 +25,7 @@ namespace Kahla.Server.Controllers
     [AiurRequireHttps]
     [AiurNoCache]
     [AiurExceptionHandler]
-    [AiurAllowAnyOrigin("https://kahla.app.aiursoft.com")]
+    [AiurAllowTargetOrigin("https://kahla.app.aiursoft.com")]
     public class ApiController : AiurController
     {
         private readonly UserManager<KahlaUser> _userManager;
@@ -423,7 +423,6 @@ namespace Kahla.Server.Controllers
         {
             await _signInManager.SignOutAsync();
             return Protocal(ErrorType.Success, "Success.");
-            //return SignoutRootServer(new AiurUrl(string.Empty, "", new { }));
         }
 
         private async Task<KahlaUser> GetKahlaUser()

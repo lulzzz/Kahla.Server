@@ -12,7 +12,7 @@ namespace Kahla.Server.Controllers
     [AiurNoCache]
     [AiurRequireHttps]
     [AiurExceptionHandler]
-    [AiurAllowAnyOrigin("http://localhost:8001")]
+    [AiurAllowTargetOrigin("http://localhost:8001")]
     public class DebugApiController : ApiController
     {
         public DebugApiController(UserManager<KahlaUser> userManager, 
