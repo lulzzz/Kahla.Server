@@ -26,7 +26,7 @@ namespace Kahla.Server.Controllers
     [AiurNoCache]
     [AiurExceptionHandler]
     [AiurAllowTargetOrigin("https://kahla.app.aiursoft.com")]
-    public class ApiController : AiurController
+    public class ApiController : AiurApiController
     {
         private readonly UserManager<KahlaUser> _userManager;
         private readonly SignInManager<KahlaUser> _signInManager;
