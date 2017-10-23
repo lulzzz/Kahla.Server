@@ -1,10 +1,10 @@
-﻿using AiursoftBase;
-using AiursoftBase.Attributes;
-using AiursoftBase.Models;
-using AiursoftBase.Models.ForApps.AddressModels;
-using AiursoftBase.Models.MessageQueue.ListenAddressModels;
-using AiursoftBase.Services;
-using AiursoftBase.Services.ToMessageQueueServer;
+﻿using Aiursoft.Pylon;
+using Aiursoft.Pylon.Attributes;
+using Aiursoft.Pylon.Models;
+using Aiursoft.Pylon.Models.ForApps.AddressModels;
+using Aiursoft.Pylon.Models.Stargate.ListenAddressModels;
+using Aiursoft.Pylon.Services;
+using Aiursoft.Pylon.Services.ToStargateServer;
 using Kahla.Server.Data;
 using Kahla.Server.Models;
 using Kahla.Server.Models.ApiAddressModels;
@@ -17,7 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AiursoftBase.Services.ToAPIServer;
+using Aiursoft.Pylon.Services.ToAPIServer;
 using Kahla.Server.Attributes;
 
 namespace Kahla.Server.Controllers
@@ -410,7 +410,7 @@ namespace Kahla.Server.Controllers
                 message = "Successfully get your channel.",
                 ChannelId = user.CurrentChannel,
                 ConnectKey = user.ConnectKey,
-                ServerPath = new AiurUrl(Values.MessageQueueListenAddress, "Listen", "Channel", new ChannelAddressModel
+                ServerPath = new AiurUrl(Values.StargateListenAddress, "Listen", "Channel", new ChannelAddressModel
                 {
                     Id = user.CurrentChannel,
                     Key = user.ConnectKey

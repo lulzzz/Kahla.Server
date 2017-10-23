@@ -1,4 +1,4 @@
-﻿using AiursoftBase.Models.MessageQueue.ChannelViewModels;
+﻿using Aiursoft.Pylon.Models.Stargate.ChannelViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

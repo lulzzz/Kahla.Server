@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Kahla.Server.Data;
 using Kahla.Server.Models;
 using Microsoft.AspNetCore.Identity;
-using AiursoftBase.Attributes;
+using Aiursoft.Pylon.Attributes;
 
 namespace Kahla.Server.Controllers
 {

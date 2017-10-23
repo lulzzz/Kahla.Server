@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using AiursoftBase;
-using AiursoftBase.Attributes;
+using Aiursoft.Pylon;
+using Aiursoft.Pylon.Attributes;
 using System.IO;
-using AiursoftBase.Models;
+using Aiursoft.Pylon.Models;
 
 namespace Kahla.Server.Controllers
 {

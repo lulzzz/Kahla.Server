@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AiursoftBase.Services;
-using AiursoftBase.Services.ToMessageQueueServer;
-using AiursoftBase.Models.MessageQueue.ChannelViewModels;
+using Aiursoft.Pylon.Services;
+using Aiursoft.Pylon.Services.ToStargateServer;
+using Aiursoft.Pylon.Models.Stargate.ChannelViewModels;
 using Kahla.Server.Data;
-using AiursoftBase.Models;
+using Aiursoft.Pylon.Models;
 using Newtonsoft.Json;
 using Kahla.Server.Models;
 using Newtonsoft.Json.Serialization;

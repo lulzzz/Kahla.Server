@@ -1,9 +1,9 @@
-using AiursoftBase.Models.MessageQueue.ChannelViewModels;
+using Aiursoft.Pylon.Models.Stargate.ChannelViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AiursoftBase.Models;
+using Aiursoft.Pylon.Models;
 
 namespace Kahla.Server.Models.ApiViewModels
 {
