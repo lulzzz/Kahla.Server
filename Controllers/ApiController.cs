@@ -49,7 +49,7 @@ namespace Kahla.Server.Controllers
             var pack = await OAuthService.PasswordAuthAsync(Values.CurrentAppId, email, password);
             if (pack.code != ErrorType.Success)
             {
-                return Protocal(ErrorType.Unauthorized, "Wrong password.");
+                return Protocal(ErrorType.Unauthorized, pack.message);
             }
             var user = await AuthProcess.AuthApp(this, new AuthResultAddressModel
             {
@@ -81,7 +81,8 @@ namespace Kahla.Server.Controllers
             }
             else
             {
-                iconPath = await StorageService.SaveToOSS(Request.Form.Files.First(), Values.KahlaFileBucketId, SaveFileOptions.SourceName);
+                var file = Request.Form.Files.First();
+                iconPath = await StorageService.SaveToOSS(file, Values.KahlaFileBucketId, SaveFileOptions.SourceName);
             }
             return Json(new AiurValue<string>(iconPath)
             {
