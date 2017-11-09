@@ -11,9 +11,13 @@ namespace Kahla.Server.Attributes
         {
             base.OnActionExecuting(context);
             var credential = context.HttpContext.Request.Query["credential"];
-            if(string.IsNullOrEmpty(credential))
+            if (string.IsNullOrEmpty(credential))
             {
-                context.HttpContext.Response.Redirect("/notsignin");
+                context.Result = new JsonResult(new AiurProtocal
+                {
+                    code = ErrorType.Unauthorized,
+                    message = "Unauthorized!"
+                });
             }
         }
     }

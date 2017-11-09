@@ -19,6 +19,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Aiursoft.Pylon.Services.ToAPIServer;
 using Kahla.Server.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace Kahla.Server.Controllers
 {
@@ -44,7 +45,7 @@ namespace Kahla.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AuthByPassword(string email, string password)
+        public async Task<IActionResult> AuthByPassword([Required]string email, [Required]string password)
         {
             var pack = await OAuthService.PasswordAuthAsync(Values.CurrentAppId, email, password);
             if (pack.code != ErrorType.Success)
