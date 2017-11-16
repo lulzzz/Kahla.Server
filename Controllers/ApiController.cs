@@ -27,6 +27,7 @@ namespace Kahla.Server.Controllers
     [AiurNoCache]
     [AiurExceptionHandler]
     [AiurAllowTargetOrigin("https://kahla.app.aiursoft.com")]
+    [ForceValidateModelState]
     public class ApiController : AiurApiController
     {
         private readonly UserManager<KahlaUser> _userManager;
@@ -45,9 +46,9 @@ namespace Kahla.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AuthByPassword([Required]string email, [Required]string password)
+        public async Task<IActionResult> AuthByPassword(AuthByPasswordAddressModel model)
         {
-            var pack = await OAuthService.PasswordAuthAsync(Values.CurrentAppId, email, password);
+            var pack = await OAuthService.PasswordAuthAsync(Values.CurrentAppId, model.Email, model.Password);
             if (pack.code != ErrorType.Success)
             {
                 return Protocal(ErrorType.Unauthorized, pack.message);
