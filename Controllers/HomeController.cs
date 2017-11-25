@@ -11,10 +11,8 @@ using Aiursoft.Pylon.Models;
 namespace Kahla.Server.Controllers
 {
     [AiurRequireHttps]
-    [AiurExceptionHandler]
     public class HomeController : AiurController
     {
-        // [AiurForceAuth]
         public IActionResult Index()
         {
             return Protocal(ErrorType.Success, "Welcome to kahla server! View our wiki at: " + Values.WikiServerAddress);
