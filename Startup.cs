@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using Kahla.Server.Data;
 using Kahla.Server.Models;
 using Kahla.Server.Services;
@@ -42,6 +43,12 @@ namespace Kahla.Server
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, KahlaDbContext dbContext)
         {
+            var appId = Configuration["kahlaappid"];
+            var appSecret = Configuration["kahlaappsecret"];
+            if (string.IsNullOrWhiteSpace(appId) || string.IsNullOrWhiteSpace(appSecret))
+            {
+                throw new InvalidOperationException("Did not get appId and appSecret from configuration!");
+            }
             if (IsDevelopment)
             {
                 app.UseBrowserLink();
@@ -55,7 +62,7 @@ namespace Kahla.Server
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseMvcWithDefaultRoute();
-            app.UseAiursoftAuthentication(appId: "060a5b1e5c3a6535ecdb68a610716fef", appSecret: "f715f83f0ef2602d12848823e01b8e45");
+            app.UseAiursoftAuthentication(appId: appId, appSecret: appSecret);
         }
     }
 }
