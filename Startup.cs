@@ -43,12 +43,6 @@ namespace Kahla.Server
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, KahlaDbContext dbContext)
         {
-            var appId = Configuration["kahlaappid"];
-            var appSecret = Configuration["kahlaappsecret"];
-            if (string.IsNullOrWhiteSpace(appId) || string.IsNullOrWhiteSpace(appSecret))
-            {
-                throw new InvalidOperationException("Did not get appId and appSecret from configuration!");
-            }
             if (IsDevelopment)
             {
                 app.UseBrowserLink();
@@ -59,10 +53,10 @@ namespace Kahla.Server
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            app.UseAiursoftAuthenticationFromConfiguration(Configuration, "Kahla");
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseMvcWithDefaultRoute();
-            app.UseAiursoftAuthentication(appId: appId, appSecret: appSecret);
         }
     }
 }
