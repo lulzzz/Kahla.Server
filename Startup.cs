@@ -17,6 +17,7 @@ namespace Kahla.Server
         public IConfiguration Configuration { get; }
         public bool IsDevelopment { get; set; }
 
+        public static int KahlaBucketId { get; set; }
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
