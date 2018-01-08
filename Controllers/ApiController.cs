@@ -48,7 +48,7 @@ namespace Kahla.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> AuthByPassword(AuthByPasswordAddressModel model)
         {
-            var pack = await OAuthService.PasswordAuthAsync(Values.CurrentAppId, model.Email, model.Password);
+            var pack = await OAuthService.PasswordAuthAsync(Middlewares.CurrentAppId, model.Email, model.Password);
             if (pack.code != ErrorType.Success)
             {
                 return Protocal(ErrorType.Unauthorized, pack.message);
