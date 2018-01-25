@@ -23,11 +23,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Kahla.Server.Controllers
 {
-    [AiurRequireHttps]
     [AiurNoCache]
+    [AiurRequireHttps]
+    [AllowMethodHeader]
     [AiurExceptionHandler]
-    [AiurAllowTargetOrigin("https://kahla.app.aiursoft.com")]
     [ForceValidateModelState]
+    [AiurAllowTargetOrigin("https://kahla.app.aiursoft.com")]
     public class ApiController : AiurApiController
     {
         private readonly UserManager<KahlaUser> _userManager;

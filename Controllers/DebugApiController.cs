@@ -6,13 +6,16 @@ using Kahla.Server.Data;
 using Kahla.Server.Models;
 using Microsoft.AspNetCore.Identity;
 using Aiursoft.Pylon.Attributes;
+using Kahla.Server.Attributes;
 
 namespace Kahla.Server.Controllers
 {
     [AiurNoCache]
     [AiurRequireHttps]
+    [AllowMethodHeader]
     [AiurExceptionHandler]
-    [AiurAllowTargetOrigin("http://localhost:8001")]
+    [ForceValidateModelState]
+    [AiurAllowTargetOrigin("https://kahla.app.aiursoft.com")]
     public class DebugApiController : ApiController
     {
         public DebugApiController(UserManager<KahlaUser> userManager, 
