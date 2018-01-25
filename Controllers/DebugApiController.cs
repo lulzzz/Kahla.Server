@@ -14,8 +14,8 @@ namespace Kahla.Server.Controllers
     [AiurRequireHttps]
     [AllowMethodHeader]
     [AiurExceptionHandler]
-    [ForceValidateModelState]
-    [AiurAllowTargetOrigin("https://kahla.app.aiursoft.com")]
+    [AiurAllowTargetOrigin("http://localhost:8001")]
+    //[ForceValidateModelState]
     public class DebugApiController : ApiController
     {
         public DebugApiController(UserManager<KahlaUser> userManager, 

@@ -27,8 +27,8 @@ namespace Kahla.Server.Controllers
     [AiurRequireHttps]
     [AllowMethodHeader]
     [AiurExceptionHandler]
-    [ForceValidateModelState]
     [AiurAllowTargetOrigin("https://kahla.app.aiursoft.com")]
+    [ForceValidateModelState]
     public class ApiController : AiurApiController
     {
         private readonly UserManager<KahlaUser> _userManager;
@@ -45,7 +45,11 @@ namespace Kahla.Server.Controllers
             _dbContext = dbContext;
             _pusher = new PushService();
         }
-
+        [HttpOptions]
+        public IActionResult AuthByPassword()
+        {
+            return NoContent();
+        }
         [HttpPost]
         public async Task<IActionResult> AuthByPassword(AuthByPasswordAddressModel model)
         {
