@@ -437,11 +437,8 @@ namespace Kahla.Server.Controllers
 
         private async Task<KahlaUser> GetKahlaUser()
         {
-            if (HttpContext.Request.Query["credential"].Count == 0)
-            {
-                return null;
-            }
-            var credential = HttpContext.Request.Query["credential"].First();
+            var credential = HttpContext.Request.Headers["authorization"].First();
+            credential = credential.Substring(7);
             return (await this._dbContext.Credentials.Include(t => t.User).SingleOrDefaultAsync(t => t.Value == credential))?.User ?? null;
         }
     }
