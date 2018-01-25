@@ -10,7 +10,8 @@ namespace Kahla.Server.Attributes
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
-            var credential = context.HttpContext.Request.Query["credential"];
+            var credential = context.HttpContext.Request.Headers["authorization"];
+            //var credential = context.HttpContext.Request.Query["credential"];
             if (string.IsNullOrEmpty(credential))
             {
                 context.Result = new JsonResult(new AiurProtocal

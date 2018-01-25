@@ -11,10 +11,6 @@ namespace Kahla.Server.Attributes
         {
             base.OnActionExecuting(context);
             context.HttpContext.Response.Headers.Add("Access-Control-Allow-Headers", "Authorization");
-            if(context.HttpContext.Request.Method.ToLower().Trim()=="options")
-            {
-                context.Result = new NoContentResult();
-            }
         }
     }
 }

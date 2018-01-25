@@ -24,10 +24,10 @@ using System.ComponentModel.DataAnnotations;
 namespace Kahla.Server.Controllers
 {
     [AiurNoCache]
+    [AiurAllowTargetOrigin("https://kahla.app.aiursoft.com")]
     [AiurRequireHttps]
     [AllowMethodHeader]
     [AiurExceptionHandler]
-    [AiurAllowTargetOrigin("https://kahla.app.aiursoft.com")]
     [ForceValidateModelState]
     public class ApiController : AiurApiController
     {
@@ -46,10 +46,7 @@ namespace Kahla.Server.Controllers
             _pusher = new PushService();
         }
         [HttpOptions]
-        public IActionResult AuthByPassword()
-        {
-            return NoContent();
-        }
+        public IActionResult AuthByPassword() => NoContent();
         [HttpPost]
         public async Task<IActionResult> AuthByPassword(AuthByPasswordAddressModel model)
         {
@@ -77,7 +74,8 @@ namespace Kahla.Server.Controllers
                 message = "Auth success."
             });
         }
-
+        [HttpOptions]
+        public IActionResult UploadFile(string nomeaning) => NoContent();
         [HttpPost]
         public async Task<IActionResult> UploadFile()
         {
@@ -165,7 +163,8 @@ namespace Kahla.Server.Controllers
                 message = "Successfully get all your friends."
             });
         }
-
+        [HttpOptions]
+        public IActionResult DeleteFriend() => NoContent();
         [HttpPost]
         [KahlaRequireCredential]
         public async Task<IActionResult> DeleteFriend(string id)
@@ -181,7 +180,8 @@ namespace Kahla.Server.Controllers
             await _pusher.WereDeletedEvent(target.Id, _dbContext);
             return Protocal(ErrorType.Success, "Successfully deleted your friend relationship.");
         }
-
+        [HttpOptions]
+        public IActionResult CreateRequest() => NoContent();
         [HttpPost]
         [KahlaRequireCredential]
         public async Task<IActionResult> CreateRequest(string id)
@@ -211,7 +211,8 @@ namespace Kahla.Server.Controllers
                 message = "Successfully created your request!"
             });
         }
-
+        [HttpOptions]
+        public IActionResult CompleteRequest() => NoContent();
         [HttpPost]
         [KahlaRequireCredential]
         [ForceValidateModelState]
@@ -308,7 +309,8 @@ namespace Kahla.Server.Controllers
                 message = "Successfully get all your messages."
             });
         }
-
+        [HttpOptions]
+        public IActionResult SendMessage() => NoContent();
         [HttpPost]
         [KahlaRequireCredential]
         public async Task<IActionResult> SendMessage(SendMessageAddressModel model)
