@@ -23,12 +23,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Kahla.Server.Controllers
 {
+    // Reject HTTP requests.
+    [AiurRequireHttps]
+
+    // Add headers.
     [AiurNoCache]
     [AiurAllowTargetOrigin("https://kahla.app.aiursoft.com")]
-    [AiurRequireHttps]
     [AllowMethodHeader]
-    [AiurExceptionHandler]
+
+    // Force valid state.
     [ForceValidateModelState]
+    [AiurExceptionHandler]
     public class ApiController : AiurApiController
     {
         private readonly UserManager<KahlaUser> _userManager;
@@ -45,8 +50,6 @@ namespace Kahla.Server.Controllers
             _dbContext = dbContext;
             _pusher = new PushService();
         }
-        [HttpOptions]
-        public IActionResult AuthByPassword() => NoContent();
         [HttpPost]
         public async Task<IActionResult> AuthByPassword(AuthByPasswordAddressModel model)
         {
@@ -77,6 +80,7 @@ namespace Kahla.Server.Controllers
         [HttpOptions]
         public IActionResult UploadFile(string nomeaning) => NoContent();
         [HttpPost]
+        [KahlaRequireCredential]
         public async Task<IActionResult> UploadFile()
         {
             string iconPath = string.Empty;
@@ -95,7 +99,7 @@ namespace Kahla.Server.Controllers
                 message = "Successfully uploaded your file!"
             });
         }
-
+        [HttpPost]
         public async Task<IActionResult> RegisterKahla(string email, string password, string confirmPassword)
         {
             var result = await OAuthService.AppRegisterAsync(email, password, confirmPassword);
