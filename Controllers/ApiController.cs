@@ -100,9 +100,9 @@ namespace Kahla.Server.Controllers
             });
         }
         [HttpPost]
-        public async Task<IActionResult> RegisterKahla(string email, string password, string confirmPassword)
+        public async Task<IActionResult> RegisterKahla(RegisterKahlaAddressModel model)
         {
-            var result = await OAuthService.AppRegisterAsync(email, password, confirmPassword);
+            var result = await OAuthService.AppRegisterAsync(model.Email, model.Password, model.ConfirmPassword);
             return Json(result);
         }
 
