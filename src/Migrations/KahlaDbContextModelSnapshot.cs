@@ -12,29 +12,46 @@ using System;
 namespace Kahla.Server.Migrations
 {
     [DbContext(typeof(KahlaDbContext))]
-    [Migration("20170901072745_createNavigationProperty")]
-    partial class createNavigationProperty
+    partial class KahlaDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
+                .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
 
             modelBuilder.Entity("Kahla.Server.Models.Conversation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("ConversationCreateTime");
+
                     b.Property<string>("Discriminator")
                         .IsRequired();
 
                     b.HasKey("Id");
 
-                    b.ToTable("Conversation");
+                    b.ToTable("Conversations");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Conversation");
+                });
+
+            modelBuilder.Entity("Kahla.Server.Models.Credential", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Credentials");
                 });
 
             modelBuilder.Entity("Kahla.Server.Models.KahlaUser", b =>
@@ -45,6 +62,8 @@ namespace Kahla.Server.Migrations
                     b.Property<int>("AccessFailedCount");
 
                     b.Property<DateTime>("AccountCreateTime");
+
+                    b.Property<string>("Bio");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -96,8 +115,7 @@ namespace Kahla.Server.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                        .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -157,6 +175,8 @@ namespace Kahla.Server.Migrations
 
                     b.Property<DateTime>("JoinTime");
 
+                    b.Property<DateTime>("ReadTimeStamp");
+
                     b.Property<string>("UserId");
 
                     b.HasKey("Id");
@@ -186,8 +206,7 @@ namespace Kahla.Server.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                        .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -280,6 +299,9 @@ namespace Kahla.Server.Migrations
                 {
                     b.HasBaseType("Kahla.Server.Models.Conversation");
 
+                    b.Property<string>("GroupImage");
+
+                    b.Property<string>("GroupName");
 
                     b.ToTable("GroupConversation");
 
@@ -289,8 +311,6 @@ namespace Kahla.Server.Migrations
             modelBuilder.Entity("Kahla.Server.Models.PrivateConversation", b =>
                 {
                     b.HasBaseType("Kahla.Server.Models.Conversation");
-
-                    b.Property<DateTime>("ConversationCreateTime");
 
                     b.Property<string>("RequesterId");
 
@@ -305,9 +325,16 @@ namespace Kahla.Server.Migrations
                     b.HasDiscriminator().HasValue("PrivateConversation");
                 });
 
+            modelBuilder.Entity("Kahla.Server.Models.Credential", b =>
+                {
+                    b.HasOne("Kahla.Server.Models.KahlaUser", "User")
+                        .WithMany("Credentials")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("Kahla.Server.Models.Message", b =>
                 {
-                    b.HasOne("Kahla.Server.Models.PrivateConversation", "Conversation")
+                    b.HasOne("Kahla.Server.Models.Conversation", "Conversation")
                         .WithMany("Messages")
                         .HasForeignKey("ConversationId")
                         .OnDelete(DeleteBehavior.Cascade);

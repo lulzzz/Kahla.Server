@@ -9,6 +9,7 @@ using Kahla.Server.Models;
 using Kahla.Server.Services;
 using Aiursoft.Pylon;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace Kahla.Server
 {
@@ -17,7 +18,7 @@ namespace Kahla.Server
         public IConfiguration Configuration { get; }
         public bool IsDevelopment { get; set; }
 
-        public static int KahlaBucketId { get; set; } = 6;
+        public static int KahlaBucketId { get; set; } = 5;
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
@@ -30,7 +31,8 @@ namespace Kahla.Server
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.ConnectToAiursoftDatabase<KahlaDbContext>("Kahla", IsDevelopment);
+            services.AddDbContext<KahlaDbContext>(options =>
+                options.UseMySql(Configuration.GetConnectionString("DatabaseConnection")));
 
             services.AddIdentity<KahlaUser, IdentityRole>()
                 .AddEntityFrameworkStores<KahlaDbContext>()
@@ -44,6 +46,10 @@ namespace Kahla.Server
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, KahlaDbContext dbContext)
         {
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
             if (IsDevelopment)
             {
                 app.UseBrowserLink();
