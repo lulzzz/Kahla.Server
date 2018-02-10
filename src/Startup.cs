@@ -32,7 +32,7 @@ namespace Kahla.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<KahlaDbContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("DatabaseConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DatabaseConnection")));
 
             services.AddIdentity<KahlaUser, IdentityRole>()
                 .AddEntityFrameworkStores<KahlaDbContext>()
@@ -46,10 +46,6 @@ namespace Kahla.Server
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, KahlaDbContext dbContext)
         {
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
             if (IsDevelopment)
             {
                 app.UseBrowserLink();
