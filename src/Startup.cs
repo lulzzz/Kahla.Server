@@ -46,6 +46,7 @@ namespace Kahla.Server
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, KahlaDbContext dbContext)
         {
+            KahlaBucketId = Configuration["KahlaBucketId"];
             if (IsDevelopment)
             {
                 app.UseBrowserLink();
