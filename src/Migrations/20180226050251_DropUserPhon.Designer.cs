@@ -12,9 +12,10 @@ using System;
 namespace Kahla.Server.Migrations
 {
     [DbContext(typeof(KahlaDbContext))]
-    partial class KahlaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180226050251_DropUserPhon")]
+    partial class DropUserPhon
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,6 +95,8 @@ namespace Kahla.Server.Migrations
                     b.Property<string>("PasswordHash");
 
                     b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed");
 
                     b.Property<string>("PreferedLanguage");
 
