@@ -117,16 +117,6 @@ namespace Kahla.Server.Controllers
             });
         }
 
-        public IActionResult ExchangeServerAddress()
-        {
-            var accountServer = Values.AccountServerAddress;
-            return Json(new AiurValue<string>(accountServer)
-            {
-                code = ErrorType.Success,
-                message = "Successfully get your account server address."
-            });
-        }
-
         [KahlaRequireCredential]
         public async Task<IActionResult> Me()
         {
