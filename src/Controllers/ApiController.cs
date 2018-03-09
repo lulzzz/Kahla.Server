@@ -240,7 +240,9 @@ namespace Kahla.Server.Controllers
                 .Requests
                 .AsNoTracking()
                 .Include(t => t.Creator)
-                .Where(t => t.TargetId == user.Id).ToListAsync();
+                .Where(t => t.TargetId == user.Id)
+                .OrderByDescending(t => t.CreateTime)
+                .ToListAsync();
             return Json(new AiurCollection<Request>(requests)
             {
                 code = ErrorType.Success,
