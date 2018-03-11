@@ -10,6 +10,7 @@ using Kahla.Server.Services;
 using Aiursoft.Pylon;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.HttpOverrides;
+using System.Threading.Tasks;
 
 namespace Kahla.Server
 {
@@ -58,8 +59,22 @@ namespace Kahla.Server
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseAiursoftAuthenticationFromConfiguration(Configuration, "Kahla");
+            app.Use((context, next) =>
+            {
+                context.Response.Headers.Add("Access-Control-Allow-Headers", "Authorization");
+                return next();
+            });
             app.UseStaticFiles();
             app.UseAuthentication();
+            app.Use((context, next) =>
+            {
+                if (context.Request.Method == "OPTIONS")
+                {
+                    context.Response.StatusCode = 204;
+                    return Task.Delay(0);
+                }
+                return next();
+            });
             app.UseMvcWithDefaultRoute();
         }
     }

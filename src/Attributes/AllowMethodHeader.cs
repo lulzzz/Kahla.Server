@@ -10,7 +10,7 @@ namespace Kahla.Server.Attributes
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
-            context.HttpContext.Response.Headers.Add("Access-Control-Allow-Headers", "Authorization");
+
         }
     }
 }
