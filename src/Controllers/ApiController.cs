@@ -23,15 +23,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Kahla.Server.Controllers
 {
-    // Reject HTTP requests.
     [AiurRequireHttps]
-
-    // Add headers.
     [AiurNoCache]
     [AiurAllowTargetOrigin("https://kahla.app.aiursoft.com")]
-    [AllowMethodHeader]
-
-    // Force valid state.
     [ForceValidateModelState]
     [AiurExceptionHandler]
     public class ApiController : AiurApiController
