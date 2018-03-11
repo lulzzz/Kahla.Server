@@ -65,7 +65,6 @@ namespace Kahla.Server
                 return next();
             });
             app.UseAuthentication();
-            app.UseMiddleware<AddHeaderMiddleware>();
             app.UseMiddleware<HandleOptionsMiddleware>();
             app.UseMvcWithDefaultRoute();
         }

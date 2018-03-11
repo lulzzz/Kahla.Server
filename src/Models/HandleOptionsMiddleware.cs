@@ -20,6 +20,7 @@ namespace Kahla.Server.Models
             if (context.Request.Method == "OPTIONS")
             {
                 context.Response.StatusCode = 204;
+                context.Response.Headers.Add("Access-Control-Allow-Headers", "Authorization");
                 if (context.Request.Path.Value.ToLower().Contains("debug"))
                 {
                     context.Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:8001");
