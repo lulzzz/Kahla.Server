@@ -42,6 +42,16 @@ namespace Kahla.Server.Controllers
             _dbContext = dbContext;
             _pusher = new PushService();
         }
+
+        public IActionResult Version()
+        {
+            return Json(new VersionViewModel
+            {
+                LatestVersion = "0.7.0",
+                OldestSupportedVersion = "0.7.0"
+            });
+        }
+
         [HttpPost]
         public async Task<IActionResult> AuthByPassword(AuthByPasswordAddressModel model)
         {
