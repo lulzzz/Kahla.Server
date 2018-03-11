@@ -60,10 +60,6 @@ namespace Kahla.Server
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseAiursoftAuthenticationFromConfiguration(Configuration, "Kahla");
-            app.Use((context, next) =>
-            {
-                return next();
-            });
             app.UseAuthentication();
             app.UseMiddleware<HandleOptionsMiddleware>();
             app.UseMvcWithDefaultRoute();

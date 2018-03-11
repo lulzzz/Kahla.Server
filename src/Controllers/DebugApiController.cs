@@ -10,7 +10,6 @@ using Kahla.Server.Attributes;
 
 namespace Kahla.Server.Controllers
 {
-    //[AiurAllowTargetOrigin("http://localhost:8001")]
     public class DebugApiController : ApiController
     {
         public DebugApiController(UserManager<KahlaUser> userManager, 

@@ -15,9 +15,11 @@ namespace Kahla.Server.Models
             _next = next;
         }
 
-        public Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context)
         {
             context.Response.Headers.Add("Access-Control-Allow-Headers", "Authorization");
+            context.Response.Headers.Add("Cache-Control", "no-cache");
+            context.Response.Headers.Add("Expires", "-1");
             if (context.Request.Path.Value.ToLower().Contains("debug"))
             {
                 context.Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:8001");
@@ -31,9 +33,9 @@ namespace Kahla.Server.Models
             if (context.Request.Method == "OPTIONS")
             {
                 context.Response.StatusCode = 204;
-                return context.Response.WriteAsync("This response allow browser to send requests.");
+                return;
             }
-            return _next.Invoke(context);
+            await _next.Invoke(context);
         }
     }
 }
