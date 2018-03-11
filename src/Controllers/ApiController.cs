@@ -25,7 +25,7 @@ namespace Kahla.Server.Controllers
 {
     [AiurRequireHttps]
     [AiurNoCache]
-    [AiurAllowTargetOrigin("https://kahla.app.aiursoft.com")]
+    //[AiurAllowTargetOrigin("https://kahla.app.aiursoft.com")]
     [ForceValidateModelState]
     [AiurExceptionHandler]
     public class ApiController : AiurApiController
