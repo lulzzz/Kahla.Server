@@ -130,7 +130,7 @@ namespace Kahla.Server.Controllers
         }
 
         [KahlaRequireCredential]
-        public async Task<IActionResult> MyFriends(bool? orderByName)
+        public async Task<IActionResult> MyFriends([Required]bool? orderByName)
         {
             var user = await GetKahlaUser();
             var list = new List<ContactInfo>();
@@ -160,7 +160,7 @@ namespace Kahla.Server.Controllers
         }
         [HttpPost]
         [KahlaRequireCredential]
-        public async Task<IActionResult> DeleteFriend(string id)
+        public async Task<IActionResult> DeleteFriend([Required]string id)
         {
             var user = await GetKahlaUser();
             var target = await _dbContext.Users.FindAsync(id);
@@ -175,7 +175,7 @@ namespace Kahla.Server.Controllers
         }
         [HttpPost]
         [KahlaRequireCredential]
-        public async Task<IActionResult> CreateRequest(string id)
+        public async Task<IActionResult> CreateRequest([Required]string id)
         {
             var user = await GetKahlaUser();
             var target = await _dbContext.Users.FindAsync(id);
@@ -263,7 +263,7 @@ namespace Kahla.Server.Controllers
         }
 
         [KahlaRequireCredential]
-        public async Task<IActionResult> GetMessage(int id, int take = 15)
+        public async Task<IActionResult> GetMessage([Required]int id, int take = 15)
         {
             var user = await GetKahlaUser();
             var target = await _dbContext.Conversations.FindAsync(id);
@@ -336,7 +336,7 @@ namespace Kahla.Server.Controllers
         }
 
         [KahlaRequireCredential]
-        public async Task<IActionResult> UserDetail(string id)
+        public async Task<IActionResult> UserDetail([Required]string id)
         {
             var user = await GetKahlaUser();
             var target = await _dbContext.Users.AsNoTracking().SingleOrDefaultAsync(t => t.Id == id);
@@ -368,7 +368,7 @@ namespace Kahla.Server.Controllers
         }
 
         [KahlaRequireCredential]
-        public async Task<IActionResult> ConversationDetail(int id)
+        public async Task<IActionResult> ConversationDetail([Required]int id)
         {
             var user = await GetKahlaUser();
             var conversations = await _dbContext.MyConversations(user.Id);
