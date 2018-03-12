@@ -11,7 +11,6 @@ using Aiursoft.Pylon.Models;
 namespace Kahla.Server.Controllers
 {
     [AiurRequireHttps]    
-    [AiurAllowTargetOrigin("https://kahla.app.aiursoft.com")]
     public class HomeController : AiurController
     {
         public IActionResult Index()
