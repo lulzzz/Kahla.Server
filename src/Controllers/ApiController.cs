@@ -180,9 +180,9 @@ namespace Kahla.Server.Controllers
             var user = await GetKahlaUser();
             var target = await _dbContext.Users.FindAsync(id);
             if (target == null)
-                return Protocal(ErrorType.NotFound, "We did not find your target user!");
+                return Protocal(ErrorType.NotFound, "We can not find your target user!");
             if (target.Id == user.Id)
-                return Protocal(ErrorType.HasDoneAlready, "You can't request yourself!");
+                return Protocal(ErrorType.RequireAttention, "You can't request yourself!");
             var pending = _dbContext.Requests
                 .Where(t => t.CreatorId == user.Id)
                 .Where(t => t.TargetId == id)
@@ -210,7 +210,7 @@ namespace Kahla.Server.Controllers
             var user = await GetKahlaUser();
             var request = await _dbContext.Requests.FindAsync(model.Id);
             if (request == null)
-                return Protocal(ErrorType.NotFound, "We can NOT find target request.");
+                return Protocal(ErrorType.NotFound, "We can not find target request.");
             if (request.TargetId != user.Id)
                 return Protocal(ErrorType.Unauthorized, "The target user of this request is not you.");
             if (request.Completed == true)
@@ -219,7 +219,10 @@ namespace Kahla.Server.Controllers
             if (model.Accept)
             {
                 if (await _dbContext.AreFriends(request.CreatorId, request.TargetId))
-                    return Protocal(ErrorType.HasDoneAlready, "You two are already friends.");
+                {
+                    await _dbContext.SaveChangesAsync();
+                    return Protocal(ErrorType.RequireAttention, "You two are already friends.");
+                }
                 _dbContext.AddFriend(request.CreatorId, request.TargetId);
                 await _pusher.FriendAcceptedEvent(request.CreatorId, _dbContext);
             }
