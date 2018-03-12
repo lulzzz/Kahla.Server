@@ -82,7 +82,7 @@ namespace Kahla.Server.Controllers
         }
         [HttpPost]
         [KahlaRequireCredential]
-        [ContainsValidFile]
+        [ContainsValidFile("/")]
         public async Task<IActionResult> UploadFile()
         {
             string iconPath = string.Empty;
