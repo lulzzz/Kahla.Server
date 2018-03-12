@@ -82,18 +82,12 @@ namespace Kahla.Server.Controllers
         }
         [HttpPost]
         [KahlaRequireCredential]
+        [ContainsValidFile]
         public async Task<IActionResult> UploadFile()
         {
             string iconPath = string.Empty;
-            if (Request.Form.Files.Count == 0 || Request.Form.Files.First().Length < 1)
-            {
-                return Protocal(ErrorType.InvalidInput, "You didn't upload any file.");
-            }
-            else
-            {
-                var file = Request.Form.Files.First();
-                iconPath = await StorageService.SaveToOSS(file, Startup.KahlaBucketId, SaveFileOptions.RandomName);
-            }
+            var file = Request.Form.Files.First();
+            iconPath = await StorageService.SaveToOSS(file, Startup.KahlaBucketId, SaveFileOptions.RandomName);
             return Json(new AiurValue<string>(iconPath)
             {
                 code = ErrorType.Success,
