@@ -87,7 +87,7 @@ namespace Kahla.Server.Controllers
         {
             string iconPath = string.Empty;
             var file = Request.Form.Files.First();
-            iconPath = await StorageService.SaveToOSS(file, Startup.KahlaBucketId, SaveFileOptions.RandomName);
+            iconPath = await StorageService.SaveToOSS(file, Startup.KahlaBucketId, 7, SaveFileOptions.RandomName);
             return Json(new AiurValue<string>(iconPath)
             {
                 code = ErrorType.Success,
