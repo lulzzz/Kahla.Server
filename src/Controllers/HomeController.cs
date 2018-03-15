@@ -10,16 +10,16 @@ using Aiursoft.Pylon.Models;
 
 namespace Kahla.Server.Controllers
 {
-    public class HomeController : AiurController
+    public class HomeController : Controller
     {
         public IActionResult Index()
         {
-            return Protocal(ErrorType.Success, "Welcome to kahla server! View our wiki at: " + Values.WikiServerAddress);
+            return this.Protocal(ErrorType.Success, "Welcome to kahla server! View our wiki at: " + Values.WikiServerAddress);
         }
 
         public IActionResult Error()
         {
-            return Protocal(ErrorType.UnknownError, "Kahla server crushed! Please tell us!");
+            return this.Protocal(ErrorType.UnknownError, "Kahla server crushed! Please tell us!");
         }
     }
 }

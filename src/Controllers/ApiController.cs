@@ -25,7 +25,7 @@ namespace Kahla.Server.Controllers
 {
     [ForceValidateModelState]
     [AiurExceptionHandler]
-    public class ApiController : AiurController
+    public class ApiController : Controller
     {
         private readonly UserManager<KahlaUser> _userManager;
         private readonly SignInManager<KahlaUser> _signInManager;
@@ -58,7 +58,7 @@ namespace Kahla.Server.Controllers
             var pack = await OAuthService.PasswordAuthAsync(Extends.CurrentAppId, model.Email, model.Password);
             if (pack.code != ErrorType.Success)
             {
-                return Protocal(ErrorType.Unauthorized, pack.message);
+                return this.Protocal(ErrorType.Unauthorized, pack.message);
             }
             var user = await AuthProcess.AuthApp(this, new AuthResultAddressModel
             {
@@ -158,13 +158,13 @@ namespace Kahla.Server.Controllers
             var user = await GetKahlaUser();
             var target = await _dbContext.Users.FindAsync(id);
             if (target == null)
-                return Protocal(ErrorType.NotFound, "We can not find target user.");
+                return this.Protocal(ErrorType.NotFound, "We can not find target user.");
             if (!await _dbContext.AreFriends(user.Id, target.Id))
-                return Protocal(ErrorType.NotEnoughResources, "He is not your friend at all.");
+                return this.Protocal(ErrorType.NotEnoughResources, "He is not your friend at all.");
             await _dbContext.RemoveFriend(user.Id, target.Id);
             await _dbContext.SaveChangesAsync();
             await _pusher.WereDeletedEvent(target.Id, _dbContext);
-            return Protocal(ErrorType.Success, "Successfully deleted your friend relationship.");
+            return this.Protocal(ErrorType.Success, "Successfully deleted your friend relationship.");
         }
         [HttpPost]
         [KahlaRequireCredential]
@@ -173,18 +173,18 @@ namespace Kahla.Server.Controllers
             var user = await GetKahlaUser();
             var target = await _dbContext.Users.FindAsync(id);
             if (target == null)
-                return Protocal(ErrorType.NotFound, "We can not find your target user!");
+                return this.Protocal(ErrorType.NotFound, "We can not find your target user!");
             if (target.Id == user.Id)
-                return Protocal(ErrorType.RequireAttention, "You can't request yourself!");
+                return this.Protocal(ErrorType.RequireAttention, "You can't request yourself!");
             var pending = _dbContext.Requests
                 .Where(t => t.CreatorId == user.Id)
                 .Where(t => t.TargetId == id)
                 .Exists(t => !t.Completed);
             if (pending)
-                return Protocal(ErrorType.HasDoneAlready, "There are some pending request hasn't been completed!");
+                return this.Protocal(ErrorType.HasDoneAlready, "There are some pending request hasn't been completed!");
             var areFriends = await _dbContext.AreFriends(user.Id, target.Id);
             if (areFriends)
-                return Protocal(ErrorType.HasDoneAlready, "You two are already friends!");
+                return this.Protocal(ErrorType.HasDoneAlready, "You two are already friends!");
             var request = new Request { CreatorId = user.Id, TargetId = id };
             _dbContext.Requests.Add(request);
             await _dbContext.SaveChangesAsync();
@@ -203,24 +203,24 @@ namespace Kahla.Server.Controllers
             var user = await GetKahlaUser();
             var request = await _dbContext.Requests.FindAsync(model.Id);
             if (request == null)
-                return Protocal(ErrorType.NotFound, "We can not find target request.");
+                return this.Protocal(ErrorType.NotFound, "We can not find target request.");
             if (request.TargetId != user.Id)
-                return Protocal(ErrorType.Unauthorized, "The target user of this request is not you.");
+                return this.Protocal(ErrorType.Unauthorized, "The target user of this request is not you.");
             if (request.Completed == true)
-                return Protocal(ErrorType.HasDoneAlready, "The target request is already completed.");
+                return this.Protocal(ErrorType.HasDoneAlready, "The target request is already completed.");
             request.Completed = true;
             if (model.Accept)
             {
                 if (await _dbContext.AreFriends(request.CreatorId, request.TargetId))
                 {
                     await _dbContext.SaveChangesAsync();
-                    return Protocal(ErrorType.RequireAttention, "You two are already friends.");
+                    return this.Protocal(ErrorType.RequireAttention, "You two are already friends.");
                 }
                 _dbContext.AddFriend(request.CreatorId, request.TargetId);
                 await _pusher.FriendAcceptedEvent(request.CreatorId, _dbContext);
             }
             await _dbContext.SaveChangesAsync();
-            return Protocal(ErrorType.Success, "You have successfully completed this request.");
+            return this.Protocal(ErrorType.Success, "You have successfully completed this request.");
         }
 
         [KahlaRequireCredential]
@@ -264,7 +264,7 @@ namespace Kahla.Server.Controllers
             var user = await GetKahlaUser();
             var target = await _dbContext.Conversations.FindAsync(id);
             if (!await _dbContext.VerifyJoined(user.Id, target))
-                return Protocal(ErrorType.Unauthorized, "You don't have any relationship with that conversation.");
+                return this.Protocal(ErrorType.Unauthorized, "You don't have any relationship with that conversation.");
             //Get Messages
             var allMessages = await _dbContext
                 .Messages
@@ -303,9 +303,9 @@ namespace Kahla.Server.Controllers
             var user = await GetKahlaUser();
             var target = await _dbContext.Conversations.FindAsync(model.Id);
             if (!await _dbContext.VerifyJoined(user.Id, target))
-                return Protocal(ErrorType.Unauthorized, "You don't have any relationship with that conversation.");
+                return this.Protocal(ErrorType.Unauthorized, "You don't have any relationship with that conversation.");
             if (model.Content.Trim().Length == 0)
-                return Protocal(ErrorType.InvalidInput, "Can not send empty message.");
+                return this.Protocal(ErrorType.InvalidInput, "Can not send empty message.");
             //Create message.
             var message = new Message
             {
@@ -328,7 +328,7 @@ namespace Kahla.Server.Controllers
                 await usersJoined.ForEachAsync(async t => await _pusher.NewMessageEvent(t.UserId, target.Id, _dbContext, model.Content, user));
             }
             //Return success message.
-            return Protocal(ErrorType.Success, "Your message has been sent.");
+            return this.Protocal(ErrorType.Success, "Your message has been sent.");
         }
 
         [KahlaRequireCredential]
@@ -417,7 +417,7 @@ namespace Kahla.Server.Controllers
         public async Task<IActionResult> LogOff()
         {
             await _signInManager.SignOutAsync();
-            return Protocal(ErrorType.Success, "Success.");
+            return this.Protocal(ErrorType.Success, "Success.");
         }
 
         private async Task<KahlaUser> GetKahlaUser()
