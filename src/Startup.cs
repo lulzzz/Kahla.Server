@@ -56,7 +56,8 @@ namespace Kahla.Server
             }
             app.UseAiursoftAuthenticationFromConfiguration(Configuration, "Kahla");
             app.UseAuthentication();
-            app.UseMiddleware<HandleOptionsMiddleware>();
+            app.UseHandleKahlaOptions();
+            app.UseLanguageSwitcher();
             app.UseMvcWithDefaultRoute();
         }
     }

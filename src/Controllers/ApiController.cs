@@ -25,7 +25,7 @@ namespace Kahla.Server.Controllers
 {
     [ForceValidateModelState]
     [AiurExceptionHandler]
-    public class ApiController : AiurApiController
+    public class ApiController : AiurController
     {
         private readonly UserManager<KahlaUser> _userManager;
         private readonly SignInManager<KahlaUser> _signInManager;
