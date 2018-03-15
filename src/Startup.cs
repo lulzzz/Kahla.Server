@@ -18,17 +18,11 @@ namespace Kahla.Server
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        public bool IsDevelopment { get; set; }
 
         public static int KahlaBucketId { get; set; } = 5;
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
-            IsDevelopment = env.IsDevelopment();
-            if (IsDevelopment)
-            {
-                Values.ForceRequestHttps = false;
-            }
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -49,7 +43,7 @@ namespace Kahla.Server
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, KahlaDbContext dbContext)
         {
             KahlaBucketId = Convert.ToInt32(Configuration["KahlaBucketId"]);
-            if (IsDevelopment)
+            if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
@@ -58,6 +52,7 @@ namespace Kahla.Server
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                app.UseEnforceHttps();
             }
             app.UseAiursoftAuthenticationFromConfiguration(Configuration, "Kahla");
             app.UseAuthentication();

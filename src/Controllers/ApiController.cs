@@ -23,7 +23,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Kahla.Server.Controllers
 {
-    [AiurRequireHttps]
     [ForceValidateModelState]
     [AiurExceptionHandler]
     public class ApiController : AiurApiController
@@ -56,7 +55,7 @@ namespace Kahla.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> AuthByPassword(AuthByPasswordAddressModel model)
         {
-            var pack = await OAuthService.PasswordAuthAsync(Middlewares.CurrentAppId, model.Email, model.Password);
+            var pack = await OAuthService.PasswordAuthAsync(Extends.CurrentAppId, model.Email, model.Password);
             if (pack.code != ErrorType.Success)
             {
                 return Protocal(ErrorType.Unauthorized, pack.message);

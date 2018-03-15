@@ -10,7 +10,6 @@ using Aiursoft.Pylon.Models;
 
 namespace Kahla.Server.Controllers
 {
-    [AiurRequireHttps]    
     public class HomeController : AiurController
     {
         public IActionResult Index()
