@@ -19,7 +19,6 @@ namespace Kahla.Server
     {
         public IConfiguration Configuration { get; }
 
-        public static int KahlaBucketId { get; set; } = 5;
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
@@ -42,7 +41,6 @@ namespace Kahla.Server
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, KahlaDbContext dbContext)
         {
-            KahlaBucketId = Convert.ToInt32(Configuration["KahlaBucketId"]);
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();

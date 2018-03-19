@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using Aiursoft.Pylon.Services.ToAPIServer;
 using Kahla.Server.Attributes;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Configuration;
 
 namespace Kahla.Server.Controllers
 {
@@ -31,15 +32,18 @@ namespace Kahla.Server.Controllers
         private readonly SignInManager<KahlaUser> _signInManager;
         private readonly KahlaDbContext _dbContext;
         private readonly PushService _pusher;
+        private readonly IConfiguration _configuration;
 
         public ApiController(UserManager<KahlaUser> userManager,
             SignInManager<KahlaUser> signInManager,
-            KahlaDbContext dbContext)
+            KahlaDbContext dbContext,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _dbContext = dbContext;
             _pusher = new PushService();
+            _configuration = configuration;
         }
 
         public IActionResult Version()
@@ -86,7 +90,7 @@ namespace Kahla.Server.Controllers
         {
             string iconPath = string.Empty;
             var file = Request.Form.Files.First();
-            iconPath = await StorageService.SaveToOSS(file, Startup.KahlaBucketId, 7, SaveFileOptions.RandomName);
+            iconPath = await StorageService.SaveToOSS(file, Convert.ToInt32(_configuration["KahlaBucketId"]), 7, SaveFileOptions.RandomName);
             return Json(new AiurValue<string>(iconPath)
             {
                 code = ErrorType.Success,
