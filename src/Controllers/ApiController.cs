@@ -83,9 +83,11 @@ namespace Kahla.Server.Controllers
                 message = "Auth success."
             });
         }
+
         [HttpPost]
         [KahlaRequireCredential]
-        [ContainsValidFile("/")]
+        [ContainsValidFile]
+        [ForceValidateModelState]
         public async Task<IActionResult> UploadFile()
         {
             string iconPath = string.Empty;
@@ -97,6 +99,7 @@ namespace Kahla.Server.Controllers
                 message = "Successfully uploaded your file!"
             });
         }
+
         [HttpPost]
         public async Task<IActionResult> RegisterKahla(RegisterKahlaAddressModel model)
         {
