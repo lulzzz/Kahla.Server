@@ -11,6 +11,7 @@ namespace Kahla.Server.Models.ApiAddressModels
         [Required]
         [MaxLength(20)]
         public virtual string NickName { get; set; }
+        [MaxLength(80)]
         public virtual string Bio { get; set; }
     }
 }

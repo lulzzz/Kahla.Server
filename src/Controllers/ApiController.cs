@@ -85,17 +85,6 @@ namespace Kahla.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateInfo(UpdateInfoAddressModel model)
-        {
-            var cuser = await GetKahlaUser();
-            cuser.NickName = model.NickName;
-            cuser.Bio = model.Bio;
-            await UserService.ChangeProfileAsync(cuser.Id, await AppsContainer.AccessToken()(), cuser.NickName, string.Empty, cuser.Bio);
-            await _userManager.UpdateAsync(cuser);
-            return this.Protocal(ErrorType.Success, "Successfully set your personal info.");
-        }
-
-        [HttpPost]
         [KahlaRequireCredential]
         [ContainsValidFile]
         [ForceValidateModelState]
@@ -139,6 +128,18 @@ namespace Kahla.Server.Controllers
                 message = "Successfully get your information."
             });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateInfo(UpdateInfoAddressModel model)
+        {
+            var cuser = await GetKahlaUser();
+            cuser.NickName = model.NickName;
+            cuser.Bio = model.Bio;
+            await UserService.ChangeProfileAsync(cuser.Id, await AppsContainer.AccessToken()(), cuser.NickName, string.Empty, cuser.Bio);
+            await _userManager.UpdateAsync(cuser);
+            return this.Protocal(ErrorType.Success, "Successfully set your personal info.");
+        }
+
 
         [KahlaRequireCredential]
         public async Task<IActionResult> MyFriends([Required]bool? orderByName)
