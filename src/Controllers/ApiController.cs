@@ -133,9 +133,19 @@ namespace Kahla.Server.Controllers
         public async Task<IActionResult> UpdateInfo(UpdateInfoAddressModel model)
         {
             var cuser = await GetKahlaUser();
-            cuser.NickName = model.NickName;
-            cuser.Bio = model.Bio;
-            await UserService.ChangeProfileAsync(cuser.Id, await AppsContainer.AccessToken()(), cuser.NickName, string.Empty, cuser.Bio);
+            if (!string.IsNullOrEmpty(model.NickName))
+            {
+                cuser.NickName = model.NickName;
+            }
+            if (!string.IsNullOrEmpty(model.HeadImgUrl))
+            {
+                cuser.HeadImgUrl = model.HeadImgUrl;
+            }
+            if (!string.IsNullOrEmpty(model.Bio))
+            {
+                cuser.Bio = model.Bio;
+            }
+            await UserService.ChangeProfileAsync(cuser.Id, await AppsContainer.AccessToken()(), cuser.NickName, cuser.HeadImgUrl, cuser.Bio);
             await _userManager.UpdateAsync(cuser);
             return this.Protocal(ErrorType.Success, "Successfully set your personal info.");
         }
