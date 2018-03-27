@@ -31,18 +31,19 @@ namespace Kahla.Server.Controllers
         private readonly UserManager<KahlaUser> _userManager;
         private readonly SignInManager<KahlaUser> _signInManager;
         private readonly KahlaDbContext _dbContext;
-        private readonly PushService _pusher;
+        private readonly PushKahlaMessageService _pusher;
         private readonly IConfiguration _configuration;
 
         public ApiController(UserManager<KahlaUser> userManager,
             SignInManager<KahlaUser> signInManager,
             KahlaDbContext dbContext,
+            PushKahlaMessageService pushService,
             IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _dbContext = dbContext;
-            _pusher = new PushService();
+            _pusher = pushService;
             _configuration = configuration;
         }
 
@@ -192,7 +193,7 @@ namespace Kahla.Server.Controllers
                 return this.Protocal(ErrorType.NotEnoughResources, "He is not your friend at all.");
             await _dbContext.RemoveFriend(user.Id, target.Id);
             await _dbContext.SaveChangesAsync();
-            await _pusher.WereDeletedEvent(target.Id, _dbContext);
+            await _pusher.WereDeletedEvent(target.Id);
             return this.Protocal(ErrorType.Success, "Successfully deleted your friend relationship.");
         }
         [HttpPost]
@@ -217,7 +218,7 @@ namespace Kahla.Server.Controllers
             var request = new Request { CreatorId = user.Id, TargetId = id };
             _dbContext.Requests.Add(request);
             await _dbContext.SaveChangesAsync();
-            await _pusher.NewFriendRequestEvent(target.Id, user.Id, _dbContext);
+            await _pusher.NewFriendRequestEvent(target.Id, user.Id);
             return Json(new AiurValue<int>(request.Id)
             {
                 code = ErrorType.Success,
@@ -246,7 +247,7 @@ namespace Kahla.Server.Controllers
                     return this.Protocal(ErrorType.RequireAttention, "You two are already friends.");
                 }
                 _dbContext.AddFriend(request.CreatorId, request.TargetId);
-                await _pusher.FriendAcceptedEvent(request.CreatorId, _dbContext);
+                await _pusher.FriendAcceptedEvent(request.CreatorId);
             }
             await _dbContext.SaveChangesAsync();
             return this.Protocal(ErrorType.Success, "You have successfully completed this request.");
@@ -348,13 +349,13 @@ namespace Kahla.Server.Controllers
             if (target.Discriminator == nameof(PrivateConversation))
             {
                 var privateConversation = target as PrivateConversation;
-                await _pusher.NewMessageEvent(privateConversation.RequesterId, target.Id, _dbContext, model.Content, user);
-                await _pusher.NewMessageEvent(privateConversation.TargetId, target.Id, _dbContext, model.Content, user);
+                await _pusher.NewMessageEvent(privateConversation.RequesterId, target.Id, model.Content, user);
+                await _pusher.NewMessageEvent(privateConversation.TargetId, target.Id, model.Content, user);
             }
             else if (target.Discriminator == nameof(GroupConversation))
             {
                 var usersJoined = _dbContext.UserGroupRelations.Where(t => t.GroupId == target.Id);
-                await usersJoined.ForEachAsync(async t => await _pusher.NewMessageEvent(t.UserId, target.Id, _dbContext, model.Content, user));
+                await usersJoined.ForEachAsync(async t => await _pusher.NewMessageEvent(t.UserId, target.Id, model.Content, user));
             }
             //Return success message.
             return this.Protocal(ErrorType.Success, "Your message has been sent.");

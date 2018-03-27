@@ -13,8 +13,17 @@ using Newtonsoft.Json.Serialization;
 
 namespace Kahla.Server.Services
 {
-    public class PushService
+    public class PushKahlaMessageService
     {
+        private readonly KahlaDbContext _dbContext;
+        private readonly PushMessageService _pushMessageService;
+        public PushKahlaMessageService(
+            KahlaDbContext dbContext,
+            PushMessageService pushMessageService)
+        {
+            _dbContext = dbContext;
+            _pushMessageService = pushMessageService;
+        }
         private string _CammalSer(object obj)
         {
             return JsonConvert.SerializeObject(obj, Formatting.Indented, new JsonSerializerSettings
@@ -30,7 +39,7 @@ namespace Kahla.Server.Services
             return channel;
         }
 
-        public async Task NewMessageEvent(string recieverId, int conversationId, KahlaDbContext _dbContext, string Content, KahlaUser sender)
+        public async Task NewMessageEvent(string recieverId, int conversationId, string Content, KahlaUser sender)
         {
             var token = AppsContainer.AccessToken();
             var user = await _dbContext.Users.FindAsync(recieverId);
@@ -43,10 +52,10 @@ namespace Kahla.Server.Services
                 Content = Content
             };
             if (channel != -1)
-                await MessageService.PushMessageAsync(await token(), channel, _CammalSer(nevent), true);
+                await _pushMessageService.PushMessageAsync(await token(), channel, _CammalSer(nevent), true);
         }
 
-        public async Task NewFriendRequestEvent(string recieverId, string requesterId, KahlaDbContext _dbContext)
+        public async Task NewFriendRequestEvent(string recieverId, string requesterId)
         {
             var token = AppsContainer.AccessToken();
             var user = await _dbContext.Users.FindAsync(recieverId);
@@ -57,10 +66,10 @@ namespace Kahla.Server.Services
                 RequesterId = requesterId
             };
             if (channel != -1)
-                await MessageService.PushMessageAsync(await token(), channel, _CammalSer(nevent), true);
+                await _pushMessageService.PushMessageAsync(await token(), channel, _CammalSer(nevent), true);
         }
 
-        public async Task WereDeletedEvent(string recieverId, KahlaDbContext _dbContext)
+        public async Task WereDeletedEvent(string recieverId)
         {
             var token = AppsContainer.AccessToken();
             var user = await _dbContext.Users.FindAsync(recieverId);
@@ -70,10 +79,10 @@ namespace Kahla.Server.Services
                 Type = EventType.WereDeletedEvent
             };
             if (channel != -1)
-                await MessageService.PushMessageAsync(await token(), channel, _CammalSer(nevent), true);
+                await _pushMessageService.PushMessageAsync(await token(), channel, _CammalSer(nevent), true);
         }
 
-        public async Task FriendAcceptedEvent(string recieverId, KahlaDbContext _dbContext)
+        public async Task FriendAcceptedEvent(string recieverId)
         {
             var token = AppsContainer.AccessToken();
             var user = await _dbContext.Users.FindAsync(recieverId);
@@ -83,7 +92,7 @@ namespace Kahla.Server.Services
                 Type = EventType.FriendAcceptedEvent
             };
             if (channel != -1)
-                await MessageService.PushMessageAsync(await token(), channel, _CammalSer(nevent), true);
+                await _pushMessageService.PushMessageAsync(await token(), channel, _CammalSer(nevent), true);
         }
     }
 }

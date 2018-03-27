@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.HttpOverrides;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Aiursoft.Pylon.Services.ToStargateServer;
+using Aiursoft.Pylon.Services;
 
 namespace Kahla.Server
 {
@@ -35,8 +37,9 @@ namespace Kahla.Server
 
             services.AddMvc();
 
-            services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddTransient<HTTPService>();
+            services.AddTransient<PushMessageService>();
+            services.AddTransient<PushKahlaMessageService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, KahlaDbContext dbContext)
