@@ -10,6 +10,7 @@ using Kahla.Server.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Kahla.Server.Services;
+using Aiursoft.Pylon.Services;
 
 namespace Kahla.Server.Controllers
 {
@@ -20,7 +21,8 @@ namespace Kahla.Server.Controllers
             SignInManager<KahlaUser> signInManager,
             KahlaDbContext dbContext,
             PushKahlaMessageService pushService,
-            IConfiguration configuration) : base(userManager, signInManager, dbContext, pushService, configuration)
+            IConfiguration configuration,
+            AuthService<KahlaUser> authService) : base(userManager, signInManager, dbContext, pushService, configuration, authService)
         {
         }
     }
