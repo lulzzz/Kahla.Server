@@ -454,6 +454,10 @@ namespace Kahla.Server.Controllers
 
         private async Task<KahlaUser> GetKahlaUser()
         {
+            if (User?.Identity?.Name == null)
+            {
+                return null;
+            }
             return await _userManager.FindByNameAsync(User.Identity.Name);
         }
     }
