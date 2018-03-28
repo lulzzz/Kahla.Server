@@ -73,14 +73,14 @@ namespace Kahla.Server.Controllers
                 code = pack.Value,
                 state = string.Empty
             });
-            var credential = new Credential
-            {
-                UserId = user.Id,
-                Value = StringOperation.RandomString(30),
-            };
-            _dbContext.Credentials.Add(credential);
+            //var credential = new Credential
+            //{
+            //    UserId = user.Id,
+            //    Value = StringOperation.RandomString(30),
+            //};
+            //_dbContext.Credentials.Add(credential);
             await _dbContext.SaveChangesAsync();
-            return Json(new AiurValue<string>(credential.Value)
+            return Json(new AiurProtocal()
             {
                 code = ErrorType.Success,
                 message = "Auth success."
@@ -454,14 +454,7 @@ namespace Kahla.Server.Controllers
 
         private async Task<KahlaUser> GetKahlaUser()
         {
-            var exsit = HttpContext.Request.Headers["authorization"].Count() > 0;
-            if (!exsit)
-                return null;
-            var credential = HttpContext.Request.Headers["authorization"].First();
-            if (!credential.ToLower().StartsWith("bearer "))
-                return null;
-            credential = credential.Substring(7);
-            return (await this._dbContext.Credentials.Include(t => t.User).SingleOrDefaultAsync(t => t.Value == credential))?.User ?? null;
+            return await _userManager.FindByNameAsync(User.Identity.Name);
         }
     }
 }
