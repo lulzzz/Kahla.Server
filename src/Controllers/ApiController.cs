@@ -33,18 +33,21 @@ namespace Kahla.Server.Controllers
         private readonly KahlaDbContext _dbContext;
         private readonly PushKahlaMessageService _pusher;
         private readonly IConfiguration _configuration;
+        private readonly AuthService<KahlaUser> _authService;
 
         public ApiController(UserManager<KahlaUser> userManager,
             SignInManager<KahlaUser> signInManager,
             KahlaDbContext dbContext,
             PushKahlaMessageService pushService,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            AuthService<KahlaUser> authService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _dbContext = dbContext;
             _pusher = pushService;
             _configuration = configuration;
+            _authService = authService;
         }
 
         public IActionResult Version()
@@ -65,12 +68,11 @@ namespace Kahla.Server.Controllers
             {
                 return this.Protocal(ErrorType.Unauthorized, pack.message);
             }
-            var user = await AuthProcess.AuthApp(this, new AuthResultAddressModel
+            var user = await _authService.AuthApp(new AuthResultAddressModel
             {
                 code = pack.Value,
                 state = string.Empty
-            }, _userManager, _signInManager);
-
+            });
             var credential = new Credential
             {
                 UserId = user.Id,

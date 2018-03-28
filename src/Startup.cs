@@ -36,7 +36,7 @@ namespace Kahla.Server
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
-
+            services.AddTransient<AuthService<KahlaUser>>();
             services.AddTransient<HTTPService>();
             services.AddTransient<PushMessageService>();
             services.AddTransient<PushKahlaMessageService>();
