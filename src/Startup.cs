@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Aiursoft.Pylon.Services.ToStargateServer;
 using Aiursoft.Pylon.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Kahla.Server
 {
@@ -31,7 +32,9 @@ namespace Kahla.Server
             services.AddDbContext<KahlaDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DatabaseConnection")));
 
-            services.AddIdentity<KahlaUser, IdentityRole>()
+            services
+                .ConfigureApplicationCookie(options => options.Cookie.SameSite = SameSiteMode.None)
+                .AddIdentity<KahlaUser, IdentityRole>()
                 .AddEntityFrameworkStores<KahlaDbContext>()
                 .AddDefaultTokenProviders();
 

@@ -73,13 +73,6 @@ namespace Kahla.Server.Controllers
                 code = pack.Value,
                 state = string.Empty
             });
-            //var credential = new Credential
-            //{
-            //    UserId = user.Id,
-            //    Value = StringOperation.RandomString(30),
-            //};
-            //_dbContext.Credentials.Add(credential);
-            await _dbContext.SaveChangesAsync();
             return Json(new AiurProtocal()
             {
                 code = ErrorType.Success,
