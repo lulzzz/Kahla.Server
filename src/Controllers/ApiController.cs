@@ -72,7 +72,7 @@ namespace Kahla.Server.Controllers
             {
                 code = pack.Value,
                 state = string.Empty
-            });
+            }, isPersistent: true);
             return Json(new AiurProtocal()
             {
                 code = ErrorType.Success,
@@ -447,7 +447,7 @@ namespace Kahla.Server.Controllers
 
         private async Task<KahlaUser> GetKahlaUser()
         {
-            if (User?.Identity?.Name == null)
+            if (!User.Identity.IsAuthenticated)
             {
                 return null;
             }

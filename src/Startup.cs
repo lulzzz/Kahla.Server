@@ -32,9 +32,7 @@ namespace Kahla.Server
             services.AddDbContext<KahlaDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DatabaseConnection")));
 
-            services
-                .ConfigureApplicationCookie(options => options.Cookie.SameSite = SameSiteMode.None)
-                .AddIdentity<KahlaUser, IdentityRole>()
+            services.AddIdentity<KahlaUser, IdentityRole>()
                 .AddEntityFrameworkStores<KahlaDbContext>()
                 .AddDefaultTokenProviders();
 
